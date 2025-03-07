@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orderDb
+    username: admin
+    password: sa1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update        # Veritabanı şemasının otomatik güncellenmesi: "create", "create-drop", "update", "validate" seçenekleri mevcut.
+    show-sql: true            # Çalışma sırasında SQL sorgularını log'larda göstermek için.
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # PostgreSQL'e özel SQL oluşturulması için gerekli.
+  cloud:
+    function:
+      definition: consumeMessage
+    stream:
+      bindings:
+        consumeMessage-in-0:
+          destination: stockResponseX
+          group: StockResponse
+          consumer:
+            maxAttempts: 3
+            backOffInitialInterval: 2000
+            backOffMaxInterval: 5000
+            backOffMultiplier: 2
+      rabbit:
+        bindings:
+          consumeMessage-in-0:
+            consumer:
+              auto-bind-dlq: true
+              queueNameGroupOnly: true
+              deadLetterQueueName: StockResponses.error
+  rabbitmq:
+    host: localhost
+    port: 5003
+    username: guest
+    password: guest
+webclient:
+  basket-svc:
+    baseUrl: http://localhost:5287/api/v1/baskets
+security:
+  client:
+    id: test_client_id
+    secret: test_client_secret
+  jwt:
+    secret: testPrivateKey123456790987654321.
+scheduling:
+  produceMessage:
+     fixedDelay: 120000
+messaging:
+  stock-destination: stockResponseX

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: dev  # Varsay?lan olarak dev profilini aktif et
+#logging:
+#  level:
+#    org.springframework.cloud.stream: DEBUG
+#    org.springframework.cloud.function: DEBUG
