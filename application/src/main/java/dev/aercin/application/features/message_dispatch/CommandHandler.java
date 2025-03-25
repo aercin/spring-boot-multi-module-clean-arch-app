@@ -32,11 +32,11 @@ public class CommandHandler implements RequestHandler<Command, Result> {
 
             this.integrationService.sendToQueue(outboxMsg.getMessage());
 
-//            try {
-//                uow.getOutboxRepo().deleteById(outboxMsg.getId());
-//            } catch (Exception ex) {
-//                log.error(String.format("%s idli outbox message silinemedi", outboxMsg.getId()), ex);
-//            }
+            try {
+                uow.getOutboxRepo().deleteById(outboxMsg.getId());
+            } catch (Exception ex) {
+                log.error(String.format("%s idli outbox message silinemedi", outboxMsg.getId()), ex);
+            }
         }
 
         return Result.success();
