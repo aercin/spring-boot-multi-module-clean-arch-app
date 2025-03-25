@@ -2,8 +2,9 @@ package dev.aercin.application.features.order_place;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.aercin.application.features.order_place.external_models.BasketResult;
-import dev.aercin.application.shared.integration_events.produce.Message;
-import dev.aercin.application.shared.integration_events.produce.OrderPlacedEvent;
+import dev.aercin.application.shared.integration.service.IntegrationService;
+import dev.aercin.application.shared.integration.events.produce.Message;
+import dev.aercin.application.shared.integration.events.produce.OrderPlacedEvent;
 import dev.aercin.application.shared.mediator.RequestHandler;
 import dev.aercin.application.shared.models.PayloadResult;
 import dev.aercin.application.shared.models.Result;
@@ -18,7 +19,6 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,21 +30,14 @@ public class CommandHandler implements RequestHandler<Command, Result> {
     private final ObjectProvider<IUnitOfWork> unitOfWorkProvider;
     private final ModelMapper modelMapper;
     private final ObjectMapper jacksonMapper;
-    private final WebClient.Builder webClientBuilder;
-    private WebClient webClient;
     @Value("${webclient.basket-svc.baseUrl}")
     private String basketSvcBaseUrl;
+    private final IntegrationService integrationService;
 
     @Override
     public Result handle(Command request) {
 
-        webClient = webClientBuilder.baseUrl(basketSvcBaseUrl).build();
-
-        BasketResult basketRes = webClient.get()
-                .uri(String.format("?UserId=%s", request.getUserId()))
-                .retrieve()
-                .bodyToMono(BasketResult.class)
-                .block();
+        BasketResult basketRes = getBasketDetail(request.getUserId());
 
         if (basketRes.getIsSuccess()) {
 
@@ -82,5 +75,20 @@ public class CommandHandler implements RequestHandler<Command, Result> {
         }
 
         return Result.fail(new String[]{"unexpected situation is occured"});
+    }
+
+    private BasketResult getBasketDetail(UUID userId) {
+
+        String basketJsonRes = this.integrationService.makeHttpGetCall(String.format("%s?UserId=%s", basketSvcBaseUrl, userId));
+
+        BasketResult basketRes = null;
+
+        try {
+            basketRes = this.jacksonMapper.readValue(basketJsonRes, BasketResult.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return basketRes;
     }
 }

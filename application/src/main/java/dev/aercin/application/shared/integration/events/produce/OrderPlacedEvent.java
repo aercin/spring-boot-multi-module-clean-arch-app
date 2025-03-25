@@ -1,6 +1,6 @@
-package dev.aercin.application.shared.integration_events.produce;
+package dev.aercin.application.shared.integration.events.produce;
 
-import dev.aercin.application.shared.integration_events.EventContracts;
+import dev.aercin.application.shared.integration.events.EventContracts;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

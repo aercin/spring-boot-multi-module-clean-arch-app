@@ -1,4 +1,4 @@
-package dev.aercin.application.shared.integration_events.consume;
+package dev.aercin.application.shared.integration.events.consume;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

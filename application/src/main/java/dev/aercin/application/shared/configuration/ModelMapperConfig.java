@@ -1,8 +1,8 @@
 package dev.aercin.application.shared.configuration;
 
 import dev.aercin.application.features.order_place.external_models.BasketItem;
-import dev.aercin.application.shared.integration_events.produce.Message;
-import dev.aercin.application.shared.integration_events.produce.OrderItem;
+import dev.aercin.application.shared.integration.events.produce.Message;
+import dev.aercin.application.shared.integration.events.produce.OrderItem;
 import dev.aercin.domain.entities.Order;
 import dev.aercin.domain.entities.OrderProduct;
 import org.modelmapper.ModelMapper;

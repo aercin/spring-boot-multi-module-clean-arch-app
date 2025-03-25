@@ -18,7 +18,7 @@ spring:
       bindings:
         consumeMessage-in-0:
           destination: stockResponseX
-          group: StockResponse
+          group: StockResponses
           consumer:
             maxAttempts: 3
             backOffInitialInterval: 2000

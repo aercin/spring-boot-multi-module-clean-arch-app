@@ -1,4 +1,4 @@
-package dev.aercin.application.shared.integration_events;
+package dev.aercin.application.shared.integration.events;
 
 public class EventContracts {
     public static final String stockNotDecreasedEventMessageType = "urn:message:core_messages.IntegrationEvents:StockNotDecreasedEvent";
