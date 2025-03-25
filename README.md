@@ -18,3 +18,4 @@ The programming language of order microservice in my noSqlExperiments repository
 - Inbox/Outbox Pattern
 - Object Result Pattern for consistent result for all ep responses
 - Spring Boot Scheduling Feature for produce message to MessageQueue periodicly
+- As alternatives to Spring WebFlux and Spring Cloud Stream, Spring Integration AMQP & HTTP
